@@ -358,73 +358,61 @@ void ASConsole::convertLineEnds(ostringstream& out, int lineEnd)
 	const string& inStr = out.str();	// avoids strange looking syntax
 	string outStr;						// the converted output
 	int inLength = (int)inStr.length();
+	bool is_comment = false;
+	bool is_comment_multiline = false;
+	bool will_not_comment_multiline = false;
+	bool is_define = false;
 	for (int pos = 0; pos < inLength; pos++)
 	{
-		if (inStr[pos] == '\r')
+        if (pos < inLength-1 && (inStr[pos] == '/' && inStr[pos+1] == '/'))
+        {
+            is_comment = true;
+        }
+
+        if (pos < inLength-1 && (inStr[pos] == '/' && inStr[pos+1] == '*'))
+        {
+            is_comment_multiline = true;
+        }
+
+        if(pos < inLength-1 && inStr[pos] == '#'){
+            is_define = true;
+        }
+
+        if (pos > 0 && (inStr[pos] == '/' && inStr[pos-1] == '*'))
+        {
+            will_not_comment_multiline = true;
+        }
+
+        if (inStr[pos] == '\n')
 		{
-			if (inStr[pos + 1] == '\n')
-			{
-				// CRLF
-				if (lineEnd == LINEEND_CR)
-				{
-					outStr += inStr[pos];		// Delete the LF
-					pos++;
-					continue;
-				}
-				else if (lineEnd == LINEEND_LF)
-				{
-					outStr += inStr[pos + 1];		// Delete the CR
-					pos++;
-					continue;
-				}
-				else
-				{
-					outStr += inStr[pos];		// Do not change
-					outStr += inStr[pos + 1];
-					pos++;
-					continue;
-				}
-			}
-			else
-			{
-				// CR
-				if (lineEnd == LINEEND_CRLF)
-				{
-					outStr += inStr[pos];		// Insert the CR
-					outStr += '\n';				// Insert the LF
-					continue;
-				}
-				else if (lineEnd == LINEEND_LF)
-				{
-					outStr += '\n';				// Insert the LF
-					continue;
-				}
-				else
-				{
-					outStr += inStr[pos];		// Do not change
-					continue;
-				}
-			}
-		}
-		else if (inStr[pos] == '\n')
-		{
-			// LF
-			if (lineEnd == LINEEND_CRLF)
-			{
-				outStr += '\r';				// Insert the CR
-				outStr += inStr[pos];		// Insert the LF
-				continue;
-			}
-			else if (lineEnd == LINEEND_CR)
-			{
-				outStr += '\r';				// Insert the CR
-				continue;
-			}
-			else
-			{
-				outStr += inStr[pos];		// Do not change
-				continue;
-			}
+		    if(pos>0 && pos < inLength-1 && (inStr[pos+1] == '\n' || inStr[pos-1] == '\n'))
+            {
+                outStr += inStr[pos];
+            }
+            else if(is_comment || is_comment_multiline || is_define)
+            {
+                outStr += inStr[pos];
+            }
+            else if(pos>0 && (inStr[pos-1] == '\\' || inStr[pos-1] == ';' || inStr[pos-1] == '{' || inStr[pos-1] == '}'))
+            {
+                outStr += inStr[pos];
+            }
+            else
+            {
+                while(pos < inLength-1 && inStr[pos+1]== ' ')
+                {
+                    pos++;
+                }
+            }
+
+            is_comment = false;
+            is_define = false;
+            if(will_not_comment_multiline){
+                is_comment_multiline = false;
+                will_not_comment_multiline = false;
+            }
+
+            continue;
 		}
 		else
 		{
@@ -769,6 +757,11 @@ void ASConsole::setErrorStream(ostream* errStreamPtr)
 	errorStream = errStreamPtr;
 }
 
+void ASConsole::setLineEndsMixed(bool lineEndsMixed)
+{
+	this->lineEndsMixed = lineEndsMixed;
+}
+
 string ASConsole::getParam(const string& arg, const char* op)
 {
 	return arg.substr(strlen(op));
@@ -784,7 +777,7 @@ void ASConsole::initializeOutputEOL(LineEndFormat lineEndFormat)
 
 	outputEOL.clear();			// current line end
 	prevEOL.clear();			// previous line end
-	lineEndsMixed = false;		// output has mixed line ends, LINEEND_DEFAULT only
+	//lineEndsMixed = false;		// output has mixed line ends, LINEEND_DEFAULT only
 
 	if (lineEndFormat == LINEEND_WINDOWS)
 		outputEOL = "\r\n";
@@ -3373,6 +3366,11 @@ void ASOptions::parseOption(const string& arg, const string& errorInfo)
 		console.standardizePath(path);
 		console.setStdPathOut(path);
 	}
+	else if ( isOption(arg, "line-ends-mixed") )
+	{
+		console.setLineEndsMixed(true);
+	}
+
 	else
 		isOptionError(arg, errorInfo);
 #endif

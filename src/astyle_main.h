@@ -326,6 +326,7 @@ public:     // functions
 	void setPreserveDate(bool state);
 	void setStdPathIn(const string& path);
 	void setStdPathOut(const string& path);
+    void setLineEndsMixed(bool state);
 	void standardizePath(string& path, bool removeBeginningSeparator = false) const;
 	bool stringEndsWith(const string& str, const string& suffix) const;
 	void updateExcludeVector(const string& suffixParam);
