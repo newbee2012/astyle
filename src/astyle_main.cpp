@@ -393,7 +393,7 @@ void ASConsole::convertLineEnds(ostringstream& out, int lineEnd)
             {
                 outStr += inStr[pos];
             }
-            else if(pos>0 && (inStr[pos-1] == '\\' || inStr[pos-1] == ';' || inStr[pos-1] == '{' || inStr[pos-1] == '}'))
+            else if(pos>0 && (inStr[pos-1] == ',' || inStr[pos-1] == '"' || inStr[pos-1] == '\\' || inStr[pos-1] == ';' || inStr[pos-1] == '{' || inStr[pos-1] == '}'))
             {
                 outStr += inStr[pos];
             }
