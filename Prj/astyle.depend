@@ -1,0 +1,72 @@
+# depslib dependency file v1.0
+1491143417 source:/home/chendejia/workspace/github/astyle/src/ASBeautifier.cpp
+	"astyle.h"
+	<algorithm>
+
+1491143417 /home/chendejia/workspace/github/astyle/src/astyle.h
+	<assert>
+	<cassert>
+	<cctype>
+	<iostream>
+	<memory>
+	<string>
+	<vector>
+	<cstring>
+
+1491143417 source:/home/chendejia/workspace/github/astyle/src/ASEnhancer.cpp
+	"astyle.h"
+
+1491143417 source:/home/chendejia/workspace/github/astyle/src/ASFormatter.cpp
+	"astyle.h"
+	<algorithm>
+	<fstream>
+
+1491143417 source:/home/chendejia/workspace/github/astyle/src/ASLocalizer.cpp
+	"ASLocalizer.h"
+	<windows.h>
+	<assert>
+	<cassert>
+	<cstdio>
+	<iostream>
+	<clocale>
+	<cstdlib>
+	<typeinfo>
+
+1491143417 /home/chendejia/workspace/github/astyle/src/ASLocalizer.h
+	<string>
+	<vector>
+
+1491143417 source:/home/chendejia/workspace/github/astyle/src/ASResource.cpp
+	"astyle.h"
+	<algorithm>
+
+1512308977 source:/home/chendejia/workspace/github/astyle/src/astyle_main.cpp
+	"astyle_main.h"
+	<algorithm>
+	<cerrno>
+	<clocale>
+	<cstdlib>
+	<fstream>
+	<sstream>
+	<windows.h>
+	<dirent.h>
+	<unistd.h>
+	<sys/stat.h>
+	<unixlib.h>
+	<rms.h>
+	<ssdef.h>
+	<stsdef.h>
+	<lib$routines.h>
+	<starlet.h>
+
+1491594531 /home/chendejia/workspace/github/astyle/src/astyle_main.h
+	"astyle.h"
+	<sstream>
+	<ctime>
+	<sys/utime.h>
+	<sys/stat.h>
+	<utime.h>
+	<sys/stat.h>
+	<jni.h>
+	"ASLocalizer.h"
+
